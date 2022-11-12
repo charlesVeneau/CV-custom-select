@@ -1,0 +1,54 @@
+.selectNative,
+.selectCustom,
+.relativeBlock {
+  position: relative;
+}
+
+.selectLabel {
+  display: block;
+  text-transform: capitalize;
+}
+.selectCustom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  z-index: 20;
+}
+
+.selectCustom-trigger {
+  width: 100%;
+}
+
+.selectCustom-opts {
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.selectCustom-opts.isVisible {
+  display: block;
+}
+
+.selectCustom-opts.isHidden {
+  display: none;
+}
+
+.selectCustom-opt {
+  cursor: pointer;
+}
+
+.isActive {
+  color: white;
+  background-color: #2d86b6;
+}
+
+@media (hover: hover) {
+  .selectNative:focus + .selectCustom {
+    display: none;
+  }
+  .selectCustom {
+    display: block;
+  }
+}

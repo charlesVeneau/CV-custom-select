@@ -1,7 +1,11 @@
 .selectNative,
 .selectCustom,
-.relativeBlock {
+.relativeBlock,
+.selectCustom-trigger
+ {
   position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 .selectLabel {
@@ -16,15 +20,13 @@
   z-index: 20;
 }
 
-.selectCustom-trigger {
-  width: 100%;
-}
-
 .selectCustom-opts {
   margin-top: 0.5rem;
   margin-bottom: 2rem;
   overflow-x: hidden;
   overflow-y: scroll;
+  list-style: none;
+  padding-left: 0;
 }
 
 .selectCustom-opts.isVisible {
@@ -37,6 +39,7 @@
 
 .selectCustom-opt {
   cursor: pointer;
+  padding: 4px 0 4px 5px;
 }
 
 .isActive {

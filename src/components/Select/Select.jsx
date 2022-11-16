@@ -1,5 +1,5 @@
 import './style.css';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import useDebounce from '../../hooks/useDebounce';
 
 /**
@@ -20,7 +20,7 @@ export const Select = ({ handleChange, data, name }) => {
   let [queryValue, setQueryValue] = useState('');
   const optionList = useRef(null);
 
-  const debounceSearch = useDebounce(queryValue, 500)
+  const debounceSearch = useDebounce(queryValue, 500);
 
   const sortedData = data.sort(function (a, b) {
     if (a.label < b.label) return -1;
@@ -28,24 +28,22 @@ export const Select = ({ handleChange, data, name }) => {
     return 0;
   });
 
-
-    useEffect(() => {
-        function searchQuery() {
-            const firstIndex = sortedData.findIndex(data => data.label.toLowerCase().includes(debounceSearch.toLowerCase()))
-            console.log(firstIndex)
-            setHoverValue(firstIndex)
-            if(firstIndex >= 0)
-            document
+  useMemo(() => {
+    function searchQuery() {
+      const firstIndex = sortedData.findIndex((data) =>
+        data.label.toLowerCase().includes(debounceSearch.toLowerCase())
+      );
+      console.log(firstIndex);
+      setQueryValue('');
+      setHoverValue(firstIndex);
+      if (firstIndex >= 0)
+        document
           .querySelector(`li[data-active="${firstIndex}"]`)
-          .scrollIntoView({ block: 'center' })
-        }
-        if(debounceSearch) searchQuery();
-         clearQueryValue()
+          .scrollIntoView({ block: 'center' });
+    }
+    if (debounceSearch) searchQuery();
   }, [debounceSearch, sortedData]);
 
-  function clearQueryValue(){
-    setQueryValue('')
-  }
   /**
    * If the user clicks on the div, then get the value from the div's data-value attribute. If the user
    * clicks on the input, then get the value from the input's value attribute. If the value is NULL, then
@@ -149,28 +147,27 @@ export const Select = ({ handleChange, data, name }) => {
       ) {
         closeCustomSelect();
       }
-    // } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
-    //   //select the first occurence in the data array
-    //   const occurenceIndex = data
-    //     .map((child) => child.label.toLowerCase()[0])
-    //     .indexOf(event.key.toLowerCase());
-    //   if (occurenceIndex >= 0) {
-    //     setHoverValue(() => occurenceIndex);
-    //     document
-    //       .querySelector(`li[data-active="${occurenceIndex}"]`)
-    //       .scrollIntoView({ block: 'center' });
-    //   }
-    // }
+      // } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
+      //   //select the first occurence in the data array
+      //   const occurenceIndex = data
+      //     .map((child) => child.label.toLowerCase()[0])
+      //     .indexOf(event.key.toLowerCase());
+      //   if (occurenceIndex >= 0) {
+      //     setHoverValue(() => occurenceIndex);
+      //     document
+      //       .querySelector(`li[data-active="${occurenceIndex}"]`)
+      //       .scrollIntoView({ block: 'center' });
+      //   }
+      // }
     } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
       //select the first occurence in the data array
-      setQueryValue(queryValue += event.key);
-      console.log(queryValue);
+      setQueryValue((queryValue += event.key));
       // debounce(() => {
-    //   const filterArray = data.findIndex((item) => {
-    //     console.log(item);
-    //     return item.label.toLowerCase().includes(queryValue);
-    //   });
-    //   console.log(filterArray);
+      //   const filterArray = data.findIndex((item) => {
+      //     console.log(item);
+      //     return item.label.toLowerCase().includes(queryValue);
+      //   });
+      //   console.log(filterArray);
       // const occurenceIndex = data
       //   .map((child) => child.label.toLowerCase()[0])
       //   .indexOf(event.key.toLowerCase());
@@ -200,18 +197,6 @@ export const Select = ({ handleChange, data, name }) => {
     setIsVisible(() => false);
     setHoverValue(() => 0);
     setListeners(false);
-  }
-
-  function debounce(callback, delay) {
-    let timer;
-    return function () {
-      let args = arguments;
-      let context = this;
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        callback.apply(context, args);
-      }, delay);
-    };
   }
 
   return (
@@ -271,4 +256,4 @@ export const Select = ({ handleChange, data, name }) => {
       </div>
     </div>
   );
-}
+};

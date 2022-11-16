@@ -1,5 +1,6 @@
 import './style.css';
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import useDebounce from '../../hooks/useDebounce';
 
 /**
  * This function is a React component that renders a select element with options that are passed in as
@@ -14,10 +15,12 @@ export const Select = ({ handleChange, data, name }) => {
   let [isValid, setIsValid] = useState(false);
   let [isVisible, setIsVisible] = useState(false);
   let [hasError, setHasError] = useState(false);
-  let [selectValue, setSelectValue] = useState('NULL');
+  let [selectValue, setSelectValue] = useState('');
   let [hoverValue, setHoverValue] = useState(0);
   let [queryValue, setQueryValue] = useState('');
   const optionList = useRef(null);
+
+  const debounceSearch = useDebounce(queryValue, 500)
 
   const sortedData = data.sort(function (a, b) {
     if (a.label < b.label) return -1;
@@ -25,6 +28,24 @@ export const Select = ({ handleChange, data, name }) => {
     return 0;
   });
 
+
+    useEffect(() => {
+        function searchQuery() {
+            const firstIndex = sortedData.findIndex(data => data.label.toLowerCase().includes(debounceSearch.toLowerCase()))
+            console.log(firstIndex)
+            setHoverValue(firstIndex)
+            if(firstIndex >= 0)
+            document
+          .querySelector(`li[data-active="${firstIndex}"]`)
+          .scrollIntoView({ block: 'center' })
+        }
+        if(debounceSearch) searchQuery();
+         clearQueryValue()
+  }, [debounceSearch, sortedData]);
+
+  function clearQueryValue(){
+    setQueryValue('')
+  }
   /**
    * If the user clicks on the div, then get the value from the div's data-value attribute. If the user
    * clicks on the input, then get the value from the input's value attribute. If the value is NULL, then
@@ -128,39 +149,39 @@ export const Select = ({ handleChange, data, name }) => {
       ) {
         closeCustomSelect();
       }
-    } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
-      //select the first occurence in the data array
-      const occurenceIndex = data
-        .map((child) => child.label.toLowerCase()[0])
-        .indexOf(event.key.toLowerCase());
-      if (occurenceIndex >= 0) {
-        setHoverValue(() => occurenceIndex);
-        document
-          .querySelector(`li[data-active="${occurenceIndex}"]`)
-          .scrollIntoView({ block: 'center' });
-      }
-    }
     // } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
     //   //select the first occurence in the data array
-    //   setQueryValue((state) => (state += event.key));
-    //   console.log();
-    //   // debounce(() => {
+    //   const occurenceIndex = data
+    //     .map((child) => child.label.toLowerCase()[0])
+    //     .indexOf(event.key.toLowerCase());
+    //   if (occurenceIndex >= 0) {
+    //     setHoverValue(() => occurenceIndex);
+    //     document
+    //       .querySelector(`li[data-active="${occurenceIndex}"]`)
+    //       .scrollIntoView({ block: 'center' });
+    //   }
+    // }
+    } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
+      //select the first occurence in the data array
+      setQueryValue(queryValue += event.key);
+      console.log(queryValue);
+      // debounce(() => {
     //   const filterArray = data.findIndex((item) => {
     //     console.log(item);
     //     return item.label.toLowerCase().includes(queryValue);
     //   });
     //   console.log(filterArray);
-    //   // const occurenceIndex = data
-    //   //   .map((child) => child.label.toLowerCase()[0])
-    //   //   .indexOf(event.key.toLowerCase());
-    //   // // console.log(occurenceIndex);
-    //   // setHoverValue(() => occurenceIndex);
-    //   // document
-    //   //   .querySelector(`li[data-active="${occurenceIndex}"]`)
-    //   //   .scrollIntoView({ block: 'center' });
-    //   // }, 350);
-    //   //getHoverElement().scrollIntoView();
-    // }
+      // const occurenceIndex = data
+      //   .map((child) => child.label.toLowerCase()[0])
+      //   .indexOf(event.key.toLowerCase());
+      // // console.log(occurenceIndex);
+      // setHoverValue(() => occurenceIndex);
+      // document
+      //   .querySelector(`li[data-active="${occurenceIndex}"]`)
+      //   .scrollIntoView({ block: 'center' });
+      // }, 350);
+      //getHoverElement().scrollIntoView();
+    }
   }
 
   /**
@@ -181,17 +202,17 @@ export const Select = ({ handleChange, data, name }) => {
     setListeners(false);
   }
 
-  // function debounce(callback, delay) {
-  //   let timer;
-  //   return function () {
-  //     let args = arguments;
-  //     let context = this;
-  //     clearTimeout(timer);
-  //     timer = setTimeout(() => {
-  //       callback.apply(context, args);
-  //     }, delay);
-  //   };
-  // }
+  function debounce(callback, delay) {
+    let timer;
+    return function () {
+      let args = arguments;
+      let context = this;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        callback.apply(context, args);
+      }, delay);
+    };
+  }
 
   return (
     <div className="relativeBlock">

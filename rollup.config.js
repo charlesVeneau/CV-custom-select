@@ -1,19 +1,19 @@
-/* eslint-disable import/no-anonymous-default-export */
 import babel from 'rollup-plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import external from 'rollup-plugin-peer-deps-external';
+import { terser } from 'rollup-plugin-terser';
 import postcss from 'rollup-plugin-postcss';
 
-export default [
+const config = [
   {
     input: './src/index.js',
     output: [
       {
-        file: '/dist/index.js',
+        file: 'dist/index.js',
         format: 'cjs',
       },
       {
-        file: '/dist/index.es.js',
+        file: 'dist/index.es.js',
         format: 'es',
         exports: 'named',
       },
@@ -29,6 +29,9 @@ export default [
       }),
       external(),
       resolve(),
+      terser(),
     ],
   },
 ];
+
+export default config;

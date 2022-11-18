@@ -17,10 +17,10 @@ export const Select = ({ handleChange, data, name }) => {
   let [hasError, setHasError] = useState(false);
   let [selectValue, setSelectValue] = useState('');
   let [hoverValue, setHoverValue] = useState(0);
-  let [queryValue, setQueryValue] = useState('');
+  const queryValue = useRef('');
   const optionList = useRef(null);
 
-  const debounceSearch = useDebounce(queryValue, 500);
+  const debounceSearch = useDebounce(queryValue.current, 500);
 
   const sortedData = data.sort(function (a, b) {
     if (a.label < b.label) return -1;
@@ -33,9 +33,8 @@ export const Select = ({ handleChange, data, name }) => {
       const firstIndex = sortedData.findIndex((data) =>
         data.label.toLowerCase().includes(debounceSearch.toLowerCase())
       );
-      console.log(firstIndex);
-      setQueryValue('');
       setHoverValue(firstIndex);
+      queryValue.current = '';
       if (firstIndex >= 0)
         document
           .querySelector(`li[data-active="${firstIndex}"]`)
@@ -161,7 +160,8 @@ export const Select = ({ handleChange, data, name }) => {
       // }
     } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
       //select the first occurence in the data array
-      setQueryValue((queryValue += event.key));
+      queryValue.current += event.key;
+      console.log(queryValue.current);
       // debounce(() => {
       //   const filterArray = data.findIndex((item) => {
       //     console.log(item);

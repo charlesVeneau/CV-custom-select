@@ -1,7 +1,7 @@
 # cv-custom-select
 
-
 ## Description
+
 React librairy that display a custom hybrid select
 
 Part of the Openclassrooms Frontend dev internship.
@@ -19,6 +19,7 @@ For the custom select, you can style the option list who's display in a unordere
 ### Examples
 
 Custom the select
+
 ```
 .selectNative
  {
@@ -29,6 +30,7 @@ Custom the select
 ```
 
 Change option list style
+
 ```
 .selectCustom-opts {
   margin-top: 0.5rem;
@@ -41,6 +43,7 @@ Change option list style
 ```
 
 Change list elements style
+
 ```
 .selectCustom-opt {
   cursor: pointer;
@@ -63,8 +66,7 @@ You find it in the package.json file
 ```
  "peerDependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.2"
+    "react-dom": "^18.2.0"
   }
 ```
 
@@ -73,24 +75,11 @@ You find it in the package.json file
 The library needs 3 props
 
 ```
-<Modal isOpen={Boolean} closeModal={Function} content={Object} />
+<Select data={JSON Object} handleChange={Function} name={String} />
 ```
 
-isOpen comes from the state
+data that needs to be displayed in the option list
 
-closeModal handles the close method used by the modal cross and the outside modal click event
+handleChange that parent component state of the selection
 
-content represent the information display in the modal
-
-
-### Example
-
-```
-const content = {
-        "link": "String" (Navlink Element),
-        "linkText": "String",
-        "modalTitle": "String",
-        "modalText": "String",
-        "status": "string" (success | error)
-    }
-```
+name use for the label

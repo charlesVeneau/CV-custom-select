@@ -1,6 +1,6 @@
 {
   "name": "cv-custom-select",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A React custom hybrid select element",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -36,8 +36,6 @@
     "@storybook/testing-library": "^0.0.13",
     "babel-loader": "^8.3.0",
     "postcss": "^8.4.19",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "rollup": "^3.3.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^4.0.2",

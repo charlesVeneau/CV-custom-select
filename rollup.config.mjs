@@ -38,6 +38,7 @@ const config = [
       resolve(),
       terser(),
     ],
+    external: ['react', 'react-dom'],
   },
 ];
 

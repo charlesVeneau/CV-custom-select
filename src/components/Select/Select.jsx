@@ -184,7 +184,7 @@ export const Select = ({ handleChange, data, name }) => {
 
   return (
     <div className="relativeBlock">
-      <label for={name} className="selectLabel">
+      <label htmlFor={name} className="selectLabel">
         {name}
       </label>
       <div className="relativeBlock">

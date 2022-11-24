@@ -21,7 +21,7 @@ export const Select = ({ handleChange, data, name }) => {
   const optionList = useRef(null);
 
   const debounceSearch = useDebounce(queryValue, 500);
-  console.log('debounceSearch' + debounceSearch);
+
   const sortedData = data.sort(function (a, b) {
     if (a.label < b.label) return -1;
     if (a.label > b.label) return 1;
@@ -140,6 +140,7 @@ export const Select = ({ handleChange, data, name }) => {
         handleError(getHoverElement(), 'enter');
       }
     } else if (event.type === 'mouseup') {
+      console.log(event.target);
       if (
         !event.target.parentNode.getAttribute('aria-hidden') ||
         event.target.parentNode.getAttribute('aria-hidden') === 'true'
@@ -184,27 +185,35 @@ export const Select = ({ handleChange, data, name }) => {
 
   return (
     <div className="relativeBlock">
-      <label for={name} className="selectLabel">
+      <label
+        htmlFor={name}
+        className="selectLabel"
+        onClick={handleCustomSelect}
+      >
         {name}
       </label>
+      <input
+        id={name}
+        name={name}
+        list={`${name}List`}
+        className={`selectNative js-selectNative select ${
+          isValid ? 'isValid' : hasError ? 'hasError' : 'neutral'
+        }`}
+        defaultValue={selectValue}
+        onClick={handleCustomSelect}
+      />
+      <datalist id={`${name}List`} aria-labelledby={name}>
+        {sortedData.map((element) => {
+          return (
+            <option
+              key={element.abbrev}
+              value={element.label}
+              data-value={element.abbrev}
+            ></option>
+          );
+        })}
+      </datalist>
       <div className="relativeBlock">
-        <select
-          id={name}
-          aria-labelledby={name}
-          className={`selectNative js-selectNative select ${
-            isValid ? 'isValid' : hasError ? 'hasError' : 'neutral'
-          }`}
-          onChange={(e) => handleError(e, 'click')}
-          value={selectValue}
-        >
-          {sortedData.map((element) => {
-            return (
-              <option key={element.abbrev} value={element.abbrev}>
-                {element.label}
-              </option>
-            );
-          })}
-        </select>
         <div
           className={`selectCustom`}
           aria-hidden={isVisible ? 'false' : 'true'}

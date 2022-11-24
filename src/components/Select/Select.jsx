@@ -33,7 +33,6 @@ export const Select = ({ handleChange, data, name }) => {
       const firstIndex = sortedData.findIndex((data) =>
         data.label.toLowerCase().includes(debounceSearch.toLowerCase())
       );
-      console.log(firstIndex);
       setHoverValue(firstIndex);
       if (firstIndex >= 0)
         document
@@ -147,21 +146,11 @@ export const Select = ({ handleChange, data, name }) => {
       ) {
         closeCustomSelect();
       }
-      // } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
-      //   //select the first occurence in the data array
-      //   const occurenceIndex = data
-      //     .map((child) => child.label.toLowerCase()[0])
-      //     .indexOf(event.key.toLowerCase());
-      //   if (occurenceIndex >= 0) {
-      //     setHoverValue(() => occurenceIndex);
-      //     document
-      //       .querySelector(`li[data-active="${occurenceIndex}"]`)
-      //       .scrollIntoView({ block: 'center' });
-      //   }
-      // }
     } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
       //select the first occurence in the data array
-      setQueryValue((queryValue += event.key));
+      console.log(event);
+
+      setQueryValue(event.target.value);
     }
   }
 
@@ -188,7 +177,7 @@ export const Select = ({ handleChange, data, name }) => {
       <label
         htmlFor={name}
         className="selectLabel"
-        onClick={handleCustomSelect}
+        // onClick={handleCustomSelect}
       >
         {name}
       </label>
@@ -199,10 +188,14 @@ export const Select = ({ handleChange, data, name }) => {
         className={`selectNative js-selectNative select ${
           isValid ? 'isValid' : hasError ? 'hasError' : 'neutral'
         }`}
-        defaultValue={selectValue}
+        value={queryValue}
         onClick={handleCustomSelect}
+        onChange={(e) => {
+          console.log(e.target);
+          setQueryValue(e.target.value);
+        }}
       />
-      <datalist id={`${name}List`} aria-labelledby={name}>
+      {/* <datalist id={`${name}List`} aria-labelledby={name}>
         {sortedData.map((element) => {
           return (
             <option
@@ -212,7 +205,7 @@ export const Select = ({ handleChange, data, name }) => {
             ></option>
           );
         })}
-      </datalist>
+      </datalist> */}
       <div className="relativeBlock">
         <div
           className={`selectCustom`}

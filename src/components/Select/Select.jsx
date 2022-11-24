@@ -1,5 +1,5 @@
 import './style.css';
-import { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import useDebounce from '../../hooks/useDebounce';
 
 /**
@@ -21,7 +21,7 @@ export const Select = ({ handleChange, data, name }) => {
   const optionList = useRef(null);
 
   const debounceSearch = useDebounce(queryValue, 500);
-
+  console.log('debounceSearch' + debounceSearch);
   const sortedData = data.sort(function (a, b) {
     if (a.label < b.label) return -1;
     if (a.label > b.label) return 1;
@@ -34,7 +34,6 @@ export const Select = ({ handleChange, data, name }) => {
         data.label.toLowerCase().includes(debounceSearch.toLowerCase())
       );
       console.log(firstIndex);
-      setQueryValue('');
       setHoverValue(firstIndex);
       if (firstIndex >= 0)
         document
@@ -162,22 +161,6 @@ export const Select = ({ handleChange, data, name }) => {
     } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
       //select the first occurence in the data array
       setQueryValue((queryValue += event.key));
-      // debounce(() => {
-      //   const filterArray = data.findIndex((item) => {
-      //     console.log(item);
-      //     return item.label.toLowerCase().includes(queryValue);
-      //   });
-      //   console.log(filterArray);
-      // const occurenceIndex = data
-      //   .map((child) => child.label.toLowerCase()[0])
-      //   .indexOf(event.key.toLowerCase());
-      // // console.log(occurenceIndex);
-      // setHoverValue(() => occurenceIndex);
-      // document
-      //   .querySelector(`li[data-active="${occurenceIndex}"]`)
-      //   .scrollIntoView({ block: 'center' });
-      // }, 350);
-      //getHoverElement().scrollIntoView();
     }
   }
 
@@ -201,7 +184,7 @@ export const Select = ({ handleChange, data, name }) => {
 
   return (
     <div className="relativeBlock">
-      <label id={name} className="selectLabel">
+      <label for={name} className="selectLabel">
         {name}
       </label>
       <div className="relativeBlock">

@@ -1,6 +1,5 @@
 import './style.css';
-import React, { useState, useRef, useMemo, useEffect } from 'react';
-import useDebounce from '../../hooks/useDebounce';
+import React, { useState, useRef } from 'react';
 
 /**
  * This function is a React component that renders a select element with options that are passed in as
@@ -17,35 +16,13 @@ export const Select = ({ handleChange, data, name }) => {
   let [hasError, setHasError] = useState(false);
   let [selectValue, setSelectValue] = useState('');
   let [hoverValue, setHoverValue] = useState(0);
-  let [queryValue, setQueryValue] = useState('');
   const optionList = useRef(null);
 
-  const debounceSearch = useDebounce(queryValue, 500);
   const sortedData = data.sort(function (a, b) {
     if (a.label < b.label) return -1;
     if (a.label > b.label) return 1;
     return 0;
   });
-
-  function clearQueryValue() {
-    setQueryValue((query) => (query = ''));
-  }
-
-  useEffect(() => {
-    function searchQuery() {
-      const firstIndex = sortedData.findIndex((data) =>
-        data.label.toLowerCase().includes(debounceSearch.toLowerCase())
-      );
-      // console.log(firstIndex);
-      setHoverValue(firstIndex);
-      clearQueryValue();
-      if (firstIndex >= 0)
-        document
-          .querySelector(`li[data-active="${firstIndex}"]`)
-          .scrollIntoView({ block: 'center' });
-    }
-    if (debounceSearch) searchQuery();
-  }, [debounceSearch, sortedData, queryValue]);
 
   /**
    * If the user clicks on the div, then get the value from the div's data-value attribute. If the user
@@ -81,16 +58,6 @@ export const Select = ({ handleChange, data, name }) => {
     document.removeEventListener('keydown', customSelectEventHandler);
     document.removeEventListener('mousedown', customSelectEventHandler);
   }
-
-  /**
-   * It takes a string as an argument and returns a different string based on the value of the argument.
-   * @returns the value of the name parameter if it is equal to 'state', otherwise it is returning the
-   * value of the name parameter.
-   */
-  // function getName(name) {
-  //   if (name === 'state') return 'stateAbbrev';
-  //   else return name;
-  // }
 
   /**
    * A function that handles the custom select.
@@ -130,7 +97,6 @@ export const Select = ({ handleChange, data, name }) => {
 
   function customSelectEventHandler(event) {
     event.preventDefault();
-    // console.log(event.type);
     if (event.key === 'Escape') {
       closeCustomSelect();
     } else if (event.key === 'ArrowDown') {
@@ -150,21 +116,17 @@ export const Select = ({ handleChange, data, name }) => {
       ) {
         closeCustomSelect();
       }
-      // } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
-      //   //select the first occurence in the data array
-      //   const occurenceIndex = data
-      //     .map((child) => child.label.toLowerCase()[0])
-      //     .indexOf(event.key.toLowerCase());
-      //   if (occurenceIndex >= 0) {
-      //     setHoverValue(() => occurenceIndex);
-      //     document
-      //       .querySelector(`li[data-active="${occurenceIndex}"]`)
-      //       .scrollIntoView({ block: 'center' });
-      //   }
-      // }
     } else if (/^[a-zA-Zàâçéèêëîïôûùüÿñæœ]{1,}$/.test(event.key)) {
       //select the first occurence in the data array
-      setQueryValue((queryValue += event.key));
+      const occurenceIndex = data
+        .map((child) => child.label.toLowerCase()[0])
+        .indexOf(event.key.toLowerCase());
+      if (occurenceIndex >= 0) {
+        setHoverValue(() => occurenceIndex);
+        document
+          .querySelector(`li[data-active="${occurenceIndex}"]`)
+          .scrollIntoView({ block: 'center' });
+      }
     }
   }
 

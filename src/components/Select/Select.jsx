@@ -21,7 +21,7 @@ export const Select = ({ handleChange, data, name }) => {
   const optionList = useRef(null);
 
   const debounceSearch = useDebounce(queryValue, 500);
-  console.log('debounceSearch' + debounceSearch);
+  // console.log('debounceSearch' + debounceSearch);
   const sortedData = data.sort(function (a, b) {
     if (a.label < b.label) return -1;
     if (a.label > b.label) return 1;
@@ -33,7 +33,7 @@ export const Select = ({ handleChange, data, name }) => {
       const firstIndex = sortedData.findIndex((data) =>
         data.label.toLowerCase().includes(debounceSearch.toLowerCase())
       );
-      console.log(firstIndex);
+      // console.log(firstIndex);
       setHoverValue(firstIndex);
       if (firstIndex >= 0)
         document
@@ -66,12 +66,12 @@ export const Select = ({ handleChange, data, name }) => {
       setIsValid(false);
       setHasError(true);
       setSelectValue(null);
-      handleChange(null, getName(name));
+      handleChange(null, name);
     } else {
       setIsValid(true);
       setHasError(false);
       setSelectValue(value);
-      handleChange(value, getName(name));
+      handleChange(value, name);
     }
     setIsVisible(false);
     document.removeEventListener('keydown', customSelectEventHandler);
@@ -83,10 +83,10 @@ export const Select = ({ handleChange, data, name }) => {
    * @returns the value of the name parameter if it is equal to 'state', otherwise it is returning the
    * value of the name parameter.
    */
-  function getName(name) {
-    if (name === 'state') return 'stateAbbrev';
-    else return name;
-  }
+  // function getName(name) {
+  //   if (name === 'state') return 'stateAbbrev';
+  //   else return name;
+  // }
 
   /**
    * A function that handles the custom select.

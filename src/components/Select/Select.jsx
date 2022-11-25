@@ -35,6 +35,7 @@ export const Select = ({ handleChange, data, name }) => {
       );
       // console.log(firstIndex);
       setHoverValue(firstIndex);
+      setQueryValue('');
       if (firstIndex >= 0)
         document
           .querySelector(`li[data-active="${firstIndex}"]`)

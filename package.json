@@ -1,6 +1,6 @@
 {
   "name": "cv-custom-select",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A React custom hybrid select element",
   "main": "dist/index.js",
   "module": "dist/index.es.js",

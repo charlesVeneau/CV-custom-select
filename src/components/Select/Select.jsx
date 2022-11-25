@@ -1,5 +1,5 @@
 import './style.css';
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import useDebounce from '../../hooks/useDebounce';
 
 /**
@@ -21,28 +21,31 @@ export const Select = ({ handleChange, data, name }) => {
   const optionList = useRef(null);
 
   const debounceSearch = useDebounce(queryValue, 500);
-  // console.log('debounceSearch' + debounceSearch);
   const sortedData = data.sort(function (a, b) {
     if (a.label < b.label) return -1;
     if (a.label > b.label) return 1;
     return 0;
   });
 
-  useMemo(() => {
+  function clearQueryValue() {
+    setQueryValue((query) => (query = ''));
+  }
+
+  useEffect(() => {
     function searchQuery() {
       const firstIndex = sortedData.findIndex((data) =>
         data.label.toLowerCase().includes(debounceSearch.toLowerCase())
       );
       // console.log(firstIndex);
       setHoverValue(firstIndex);
-      setQueryValue('');
+      clearQueryValue();
       if (firstIndex >= 0)
         document
           .querySelector(`li[data-active="${firstIndex}"]`)
           .scrollIntoView({ block: 'center' });
     }
     if (debounceSearch) searchQuery();
-  }, [debounceSearch, sortedData]);
+  }, [debounceSearch, sortedData, queryValue]);
 
   /**
    * If the user clicks on the div, then get the value from the div's data-value attribute. If the user

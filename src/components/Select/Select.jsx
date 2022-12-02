@@ -11,7 +11,6 @@ import React, { useState, useRef } from 'react';
  * @returns A select element with options.
  */
 export const Select = ({ handleChange, data, name }) => {
-  let [isValid, setIsValid] = useState(false);
   let [isVisible, setIsVisible] = useState(false);
   let [hasError, setHasError] = useState(false);
   let [selectValue, setSelectValue] = useState('');
@@ -44,12 +43,10 @@ export const Select = ({ handleChange, data, name }) => {
         event.nodeName === 'LI' ? event.getAttribute('data-value') : 'NULL';
     }
     if (value === 'NULL') {
-      setIsValid(false);
       setHasError(true);
       setSelectValue(null);
       handleChange(null, name);
     } else {
-      setIsValid(true);
       setHasError(false);
       setSelectValue(value);
       handleChange(value, name);
@@ -158,7 +155,7 @@ export const Select = ({ handleChange, data, name }) => {
           id={name}
           aria-labelledby={name}
           className={`selectNative js-selectNative select ${
-            isValid ? 'isValid' : hasError ? 'hasError' : 'neutral'
+            hasError ? 'hasError' : 'neutral'
           }`}
           onChange={(e) => handleError(e, 'click')}
           value={selectValue}
